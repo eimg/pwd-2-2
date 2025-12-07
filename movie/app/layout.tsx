@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import { Clapperboard, Play } from "lucide-react";
 
 const geistSans = Geist({
@@ -25,14 +26,14 @@ export const metadata: Metadata = {
 import { GenreType } from "@/types/global";
 
 async function fetchGneres(): Promise<GenreType[]> {
-    const res = await fetch("https://api.themoviedb.org/3/genre/movie/list", {
-        headers: {
-            Authorization: `Bearer ${process.env.TMDB_TOKEN}`
-        }
-    });
+	const res = await fetch("https://api.themoviedb.org/3/genre/movie/list", {
+		headers: {
+			Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
+		},
+	});
 
-    const data = await res.json();
-    return data.genres;
+	const data = await res.json();
+	return data.genres;
 }
 
 export default async function RootLayout({
@@ -40,7 +41,7 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-    const genres = await fetchGneres();
+	const genres = await fetchGneres();
 
 	return (
 		<html lang="en">
@@ -60,19 +61,27 @@ export default async function RootLayout({
 					<section className="flex">
 						<aside className="w-[200px] p-4 border-r flex flex-col gap-1">
 							<Button
-								variant="outline"
-								className="justify-start gap-2 items-center">
-								<Play />
-								All Movies
+								asChild
+								variant="outline">
+								<Link
+									href="/"
+									className="flex justify-start gap-2 items-center">
+									<Play />
+									All Movies
+								</Link>
 							</Button>
 							{genres.map(genre => {
 								return (
 									<Button
+										asChild
 										key={genre.id}
-										variant="outline"
-										className="justify-start gap-2 items-center">
-										<Play />
-										{genre.name}
+										variant="outline">
+										<Link
+											className="flex justify-start gap-2 items-center"
+											href={`/genre/${genre.name}/${genre.id}`}>
+											<Play />
+											{genre.name}
+										</Link>
 									</Button>
 								);
 							})}

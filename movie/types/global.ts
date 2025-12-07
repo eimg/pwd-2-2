@@ -11,3 +11,10 @@ export type GenreType = {
 	id: number;
 	name: string;
 };
+
+export type PersonType = {
+	id: number;
+	name: string;
+	character: string;
+	profile_path: string;
+};
