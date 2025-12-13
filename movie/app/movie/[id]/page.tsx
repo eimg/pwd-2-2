@@ -1,4 +1,5 @@
 import { MovieType, PersonType } from "@/types/global";
+import Link from "next/link";
 
 async function fetchCast(id: string): Promise<PersonType[]> {
 	const res = await fetch(
@@ -47,13 +48,17 @@ export default async function Movie({
 			<div className="flex gap-2 flex-wrap">
 				{cast.map(person => {
 					return (
-						<div className="w-[185px] text-center mb-4">
+						<div
+							className="w-[185px] text-center mb-4"
+							key={person.id}>
 							{person.profile_path ? (
 								<img src={profile + person.profile_path} />
 							) : (
 								<div className="h-[278px] bg-gray-200"></div>
 							)}
-							<div>{person.name}</div>
+							<div>
+								<Link href={`/person/${person.id}`}>{person.name}</Link>
+							</div>
 							<div className="text-gray-600">
 								{person.character}
 							</div>

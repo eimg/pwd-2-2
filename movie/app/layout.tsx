@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 };
 
 import { GenreType } from "@/types/global";
+import { redirect } from "next/navigation";
 
 async function fetchGneres(): Promise<GenreType[]> {
 	const res = await fetch("https://api.themoviedb.org/3/genre/movie/list", {
@@ -43,6 +44,12 @@ export default async function RootLayout({
 }>) {
 	const genres = await fetchGneres();
 
+    async function search(formData: FormData) {
+		"use server";
+        const q = formData.get("q");
+        redirect(`/search?q=${q}`);
+	}
+
 	return (
 		<html lang="en">
 			<body
@@ -53,9 +60,9 @@ export default async function RootLayout({
 							<Clapperboard size={24} />
 							Next Movie
 						</h1>
-						<form className="flex gap-1">
+						<form action={search} className="flex gap-1">
 							<Input name="q" />
-							<Button>Search</Button>
+							<Button type="submit">Search</Button>
 						</form>
 					</header>
 					<section className="flex">
